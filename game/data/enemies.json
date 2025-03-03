@@ -1,0 +1,26 @@
+{
+  "enemy_level_0_2432": {
+    "name": "Glimwort",
+    "personality": "Curious and obsessively collecting. Approaches adventurers with childlike wonder, attempting to pluck off a button, lock of hair, or small item before retreating. Becomes agitated and attacks if prevented from taking its 'sample'. Hums melodically when content with its collection.",
+    "hp": 15,
+    "attack": 6,
+    "description": "A luminescent fungoid humanoid standing knee-high. Its body appears to be made of translucent amber gel with thousands of tiny blinking lights suspended within. Instead of arms, it has four tentacle-like appendages ending in delicate filaments. Wears a patchwork 'coat' made of stolen trinkets, buttons, and scraps bound together by luminous threads.",
+    "behavior": "territorial"
+  },
+  "enemy_level_0_8776": {
+    "name": "Glimmerling",
+    "personality": "Curious and playful, but easily startled. Attracted to shiny objects and will sometimes follow adventurers who carry gems or polished metal. When threatened, produces melodic sounds that can either mesmerize or cause mild confusion. Has no concept of ownership and will 'borrow' small trinkets.",
+    "hp": 15,
+    "attack": 6,
+    "description": "A translucent, crystalline entity about the size of a cat with an ever-shifting geometry of hexagonal facets. Its core pulses with soft bioluminescence that changes color based on its mood (blue when calm, yellow when curious, red when threatened). Small crystalline appendages float around it in an orbital pattern, occasionally detaching to interact with objects of interest.",
+    "behavior": "territorial"
+  },
+  "enemy_level_0_3740": {
+    "name": "Luminous Foldcrafter",
+    "personality": "Obsessively collects and reorganizes objects into geometric patterns. Communicates through shifting color patterns in its membrane. Becomes agitated when its arrangements are disturbed, but can be temporarily calmed by offering small trinkets.",
+    "hp": 22,
+    "attack": 7,
+    "description": "A translucent origami-like entity that hovers slightly above the ground. Its body constantly folds and unfolds along seemingly impossible angles, revealing glimpses of a glowing interior. Six thin appendages extend from its core, each ending in precise geometric tools made of crystallized light.",
+    "behavior": "territorial"
+  }
+}
