@@ -110,7 +110,8 @@ class Game:
             self.add_to_log("--- EXITED DIALOGUE HISTORY ---")
             
     def handle_input(self, key):
-        """Process user input."""
+        """Handle player input."""
+        # Skip if viewing dialogue history
         if self.viewing_history:
             self._view_dialogue_history(key)
             return
@@ -135,6 +136,8 @@ class Game:
         # Interaction
         elif key == 't':  # Talk
             self._interact_with_npc()
+        elif key == 'c':  # Chat with enemy
+            self._interact_with_enemy()
         elif key == 'f':  # Fight
             self._attack_enemy()
         elif key == 's':  # Save characters (manual save)
@@ -305,6 +308,104 @@ class Game:
         else:
             self.add_to_log("There's no enemy to attack here.")
             
+    def _interact_with_enemy(self):
+        """Interact with an enemy if one is adjacent to the player."""
+        enemy = self.dungeon.get_adjacent_enemy(self.player.x, self.player.y)
+        if enemy:
+            # Initial greeting if this is the first interaction
+            if not hasattr(self, 'current_enemy') or self.current_enemy != enemy:
+                self.current_enemy = enemy
+                
+                # Generate initial greeting with Claude 3.7 Sonnet
+                initial_greeting = enemy.talk("*You approach the enemy*")
+                
+                # Add enemy name as a separate line for clarity
+                self.add_to_log(f"{enemy.name}:")
+                
+                # Split long dialogue into multiple log entries
+                self._display_dialogue(initial_greeting)
+                
+                # Prompt player for response
+                self.add_to_log("(Type your response and press Enter, or just press Enter to leave)")
+                self.add_to_log("(WARNING: Talking does not prevent combat!)")
+                
+                # Enter conversation mode
+                self._get_player_input_enemy()
+            else:
+                # Already in conversation with this enemy
+                self._get_player_input_enemy()
+        else:
+            self.add_to_log("There's no enemy to talk to here.")
+    
+    def _get_player_input_enemy(self):
+        """Get text input from the player for enemy conversation."""
+        if not self.renderer or not hasattr(self, 'current_enemy'):
+            return
+            
+        # Save current game state
+        was_viewing_history = self.viewing_history
+        self.viewing_history = False
+        
+        # Get input from the player
+        curses.echo()  # Show typed characters
+        curses.curs_set(1)  # Show cursor
+        
+        # Create input area at the bottom of the screen
+        h, w = self.renderer.stdscr.getmaxyx()
+        input_win = curses.newwin(1, w, h-1, 0)
+        input_win.clear()
+        input_win.addstr(0, 0, "> ")
+        input_win.refresh()
+        
+        # Get player input (up to 70 chars)
+        input_str = ""
+        input_pos = 2  # Start after "> "
+        
+        while True:
+            # Render current state to keep display updated
+            self.render()
+            input_win.clear()
+            input_win.addstr(0, 0, f"> {input_str}")
+            input_win.move(0, input_pos)
+            input_win.refresh()
+            
+            # Get key
+            try:
+                key = input_win.getkey()
+            except:
+                continue
+                
+            # Process key
+            if key == "\n" or key == "\r":  # Enter key
+                break
+            elif key == "KEY_BACKSPACE" or key == "\b" or key == "\x7f":
+                if input_pos > 2:
+                    input_str = input_str[:-1]
+                    input_pos -= 1
+            elif len(input_str) < 70 and key.isprintable():
+                input_str += key
+                input_pos += 1
+                
+        # Exit input mode if input is empty
+        if not input_str.strip():
+            self.current_enemy = None
+            self.add_to_log("You end the conversation.")
+        else:
+            # Get response from the enemy and display it
+            self.add_to_log(f"You: {input_str}")
+            response = self.current_enemy.talk(input_str)
+            
+            self.add_to_log(f"{self.current_enemy.name}:")
+            self._display_dialogue(response)
+            
+            # Continue conversation
+            self.add_to_log("(Type your response and press Enter, or just press Enter to leave)")
+            
+        # Clean up
+        curses.noecho()
+        curses.curs_set(0)  # Hide cursor
+        self.viewing_history = was_viewing_history
+    
     def update(self):
         """Update game state."""
         # AI updates for NPCs and enemies

@@ -116,7 +116,7 @@ Conversation history:
 class Enemy(Entity):
     """Enemy character class."""
     
-    def __init__(self, name, x=0, y=0, hp=20, attack=5, behavior=None, personality=None):
+    def __init__(self, name, x=0, y=0, hp=20, attack=5, behavior=None, personality=None, description=None):
         super().__init__(
             name=name,
             char="E",
@@ -131,10 +131,74 @@ class Enemy(Entity):
         self.attack = attack
         self.behavior = behavior or "aggressive"
         self.personality = personality or "Hostile"
+        self.description = description or "A menacing creature."
         self.move_cooldown = 0
         self.move_cooldown_max = 3
         self.detection_range = 8
+        # Add conversation memory
+        self.conversation_history = []
         
+    def talk(self, player_query=None):
+        """
+        Return dialogue line from the enemy.
+        If player_query is provided, generate a response using Claude 3.7 Sonnet.
+        """
+        if player_query is None:
+            # Default aggressive response if no query provided
+            return "The enemy growls menacingly."
+        else:
+            # Use Claude 3.7 Sonnet to generate a response
+            prompt = self._build_enemy_prompt(player_query)
+            response = portkey.claude37sonnet(prompt)
+            
+            # Add to conversation history
+            self.conversation_history.append({"query": player_query, "response": response})
+            
+            return response
+    
+    def _build_enemy_prompt(self, player_query):
+        """Build a prompt for Claude based on enemy personality and conversation history."""
+        is_initial_greeting = player_query == "*You approach the enemy*"
+        
+        prompt = f"""
+You are roleplaying as {self.name}, a hostile enemy creature in a fantasy roguelike dungeon game.
+
+Character details:
+- Name: {self.name}
+- Personality: {self.personality}
+- Behavior: {self.behavior}
+- Description: {self.description}
+- HP: {self.hp}/{self.max_hp}
+
+Game context:
+You are an enemy in a dungeon. The player character is an adventurer who has encountered you.
+{'' if not is_initial_greeting else 'This is your first interaction with the player. Respond with hostility, threats, or curiosity depending on your personality.'}
+
+Respond to the player's query in character, using first person perspective. 
+Keep your response concise (1-3 sentences). Stay in character at all times.
+Don't use any markers like "Character:" or quotation marks in your response.
+Your personality and behavior should strongly influence how you respond.
+Be hostile, threatening, or aggressive, but you might also be curious about the player.
+
+Conversation history:
+"""
+        
+        # Add conversation history if it exists
+        if self.conversation_history:
+            for i, exchange in enumerate(self.conversation_history[-3:]):  # Include last 3 exchanges at most
+                prompt += f"Player: {exchange['query']}\n"
+                prompt += f"You: {exchange['response']}\n\n"
+        
+        # Add the current query, but handle initial greeting differently
+        if is_initial_greeting:
+            prompt += "Player has just approached you for the first time.\n"
+            prompt += "You: "
+        else:
+            prompt += f"Player: {player_query}\n"
+            prompt += "You: "
+        
+        return prompt
+    
     def update(self, player):
         """Update enemy behavior."""
         # Reduce cooldown

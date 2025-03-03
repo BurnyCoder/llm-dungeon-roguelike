@@ -12,6 +12,7 @@ Usage:
 Controls:
   Arrow keys: Move the player character
   t: Talk to adjacent NPCs
+  c: Chat with adjacent enemies
   f: Fight adjacent enemies
   s: Save character data (manual save)
   h: View dialogue history (use UP/DOWN to scroll, ESC to exit)

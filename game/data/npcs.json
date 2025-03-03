@@ -1,12 +1,13 @@
 {
-  "npc_level_0_4130": {
-    "name": "Grundle Tinktock",
-    "personality": "Grundle is a neurotically meticulous timekeeper who believes every dungeon should run on a proper schedule. He obsessively counts seconds under his breath and becomes visibly agitated when adventurers arrive 'off-timetable.' Despite his fussy nature, he harbors a secret fascination with chaos magic and occasionally lets small temporal anomalies occur around him just to secretly enjoy the unpredictability. Grundle maintains an elaborate fiction that he works for a 'Dungeon Management Authority' that doesn't actually exist.",
+  "npc_level_0_3218": {
+    "name": "Quillsworth Inkstain",
+    "personality": "Quillsworth is a neurotically meticulous cataloguer of dungeon artifacts who believes that proper documentation is more important than survival. He experiences emotions exclusively through the act of writing and becomes physically ill when witnessing improper grammar. Despite the obvious dangers around him, he remains convinced that his ultimate demise will come from an improperly categorized magical item rather than from any monster.",
     "dialogue": [
-      "Tsk! You're precisely eighteen minutes and forty-three seconds behind schedule! I'll have to rearrange the entire afternoon's monster rotations now!",
-      "One moment please\u2014*pulls out intricate brass pocket watch and winds it carefully*\u2014ah yes, you may proceed to be imperiled now. Do try to scream efficiently.",
-      "The Management insists all heroic epiphanies be recorded in triplicate. Do you have the proper forms? No? *sighs dramatically* I suppose I can loan you mine, but I'll need them back before the gelatinous cubes' lunch break."
+      "Ah! Another specimen for the archives! Please stand still while I sketch your likeness\u2014hmm, would you classify those appendages as 'menacing' or merely 'threatening'? The taxonomy must be precise.",
+      "No, no, NO! You're holding that enchanted dagger all wrong! The cursed end points AWAY from your major organs! It's all detailed in volume seven of my 'Practical Guide to Impractical Weaponry,' which I'd lend you if the last borrower hadn't been turned into a rather grammatically incorrect toad.",
+      "I've survived seventeen dungeon collapses, four demonic invasions, and one particularly aggressive mimic colony. But I tell you, nothing\u2014NOTHING\u2014compares to the horror of finding the magical scrolls filed under 'P' for 'powerful' instead of by their thaumaturgical resonance coefficients!",
+      "Would you be a dear and bleed a little on this parchment? I'm cataloging the hemoglobin responses to enchanted ink, and adventurer blood has such... fascinating properties. Oh don't worry, it's only mildly hallucinogenic if it touches your skin."
     ],
-    "description": "A hunched, wiry figure with pale green skin and tufts of white hair sprouting in organized patches across his scalp like precisely planted garden rows. Grundle wears a waistcoat adorned with dozens of tiny pockets, each containing a different timekeeping device, and his large, protruding eyes constantly dart between his watches and a leather-bound ledger he clutches to his chest."
+    "description": "Quillsworth is a gaunt human with ink-stained fingers and spectacles that seem to float slightly above his nose, connected to nothing visible. His body is covered in animated tattoos of text that constantly rearrange themselves into definitions and footnotes about whatever he's observing, and he carries an impossibly tall stack of journals that never topples despite defying all laws of physics."
   }
 }

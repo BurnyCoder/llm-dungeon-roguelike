@@ -222,7 +222,8 @@ class NPCGenerator:
             hp=enemy_data.get("hp", 10 + level * 5),
             attack=enemy_data.get("attack", 5 + level),
             behavior=enemy_data.get("behavior", "aggressive"),
-            personality=enemy_data.get("personality", "Hostile")
+            personality=enemy_data.get("personality", "Hostile"),
+            description=enemy_data.get("description", "A menacing creature.")
         )
     
     def _extract_json(self, text: str) -> dict:
@@ -262,5 +263,6 @@ class NPCGenerator:
             hp=10 + level * 5,
             attack=5 + level,
             behavior="aggressive",
-            personality="Hostile"
+            personality="Hostile",
+            description="A terrifying creature with sharp claws and glowing red eyes."
         ) 

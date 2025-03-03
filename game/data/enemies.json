@@ -1,26 +1,26 @@
 {
-  "enemy_level_0_7250": {
-    "name": "Whisperlamp",
-    "personality": "Curious and methodical, it's attracted to sounds and movement patterns it hasn't cataloged before. It will follow adventurers at a distance, recording their behaviors with soft clicks and luminescent pulses. If threatened, it releases stored sound as weaponized echoes. Oddly, it seems to be conducting some form of research.",
-    "hp": 18,
-    "attack": 7,
-    "description": "A floating gelatinous orb about the size of a human head, containing suspended crystalline structures that glow with soft blue-green light. Thin tendrils of light occasionally extend from its body, retracting when touched. Its translucent body reveals shadow-like movements inside that don't correspond to anything in the external environment.",
-    "behavior": "territorial"
-  },
-  "enemy_level_0_6042": {
-    "name": "Whisperleaf",
-    "personality": "Curious and melodic, the Whisperleaf is fascinated by adventurers rather than automatically hostile. It communicates through subtle leaf vibrations that create haunting tunes. It attacks only when touched or when it witnesses violence, seeing itself as a guardian of peaceful energy exchanges in the dungeon.",
+  "enemy_level_0_2396": {
+    "name": "Murmuring Veilworm",
+    "personality": "Eerily curious and constantly whispering mathematical equations. It's drawn to patterns and will sometimes pause mid-combat to trace geometric shapes in the air. When injured, it doesn't express pain but rather fascination at its own mortality, as if experiencing a novel theorem.",
     "hp": 18,
     "attack": 6,
-    "description": "A spindly humanoid figure composed of translucent green fibers with tiny leaves sprouting along its limbs. Its 'face' is a hollow depression with swirling mist inside, occasionally forming simple expressions. Small root-like tendrils serve as feet, leaving tiny fluorescent marks that fade after minutes.",
+    "description": "A translucent, cylindrical creature roughly the size of a human arm. Its body consists of overlapping transparent membranes that ripple with faint luminescent symbols. No discernible face exists, yet hundreds of tiny vibrating filaments at one end produce a continuous mathematical murmuring. It moves by contracting and expanding, leaving behind a faint trail of glowing moisture.",
     "behavior": "territorial"
   },
-  "enemy_level_0_3822": {
-    "name": "Whispering Inksmudge",
-    "personality": "Manifests from forgotten tales and discarded manuscripts. Obsessively collects snippets of language, repeating overheard phrases back in distorted echoes. Shows unusual fascination with adventurers' journals and will temporarily retreat to 'digest' new words it encounters.",
+  "enemy_level_0_171": {
+    "name": "Whisperdust",
+    "personality": "Driven by intense curiosity, Whisperdusts collect and catalog small objects, arranging them in perfect geometric patterns. They communicate through pulsing light patterns and are fascinated by adventurers' equipment. They become hostile only when their carefully arranged collections are disturbed or when they desperately want to 'sample' a piece of unique gear.",
+    "hp": 15,
+    "attack": 6,
+    "description": "A floating crystalline entity resembling a translucent jellyfish made of dust and light. Its core pulses with bioluminescent particles that shift color based on its mood. Six tendrils of sparkling dust extend from its body, each ending in a small crystalline 'hand' capable of manipulating objects with surprising precision.",
+    "behavior": "territorial"
+  },
+  "enemy_level_0_8643": {
+    "name": "Lumigloat",
+    "personality": "Curious but easily startled. Collects shiny objects and arranges them in geometric patterns. When threatened, it emits melodic humming that increases in pitch with its stress level. Tends to mirror the movements of adventurers before attacking.",
     "hp": 18,
-    "attack": 7,
-    "description": "A shimmering, semi-transparent entity resembling spilled ink that's gained sentience. Its form constantly shifts between vaguely humanoid and abstract calligraphy. Small pieces of parchment orbit its core, and written words occasionally materialize briefly across its surface before dissolving back into its inky body.",
+    "attack": 6,
+    "description": "A translucent jellyfish-like creature that hovers slightly above ground. Its bell-shaped body pulses with soft bioluminescence that shifts between pale blue and green. Instead of tentacles, it has five spiraling appendages that end in tiny crystalline structures. Its single eye is located oddly on its underside, rotating a full 360 degrees.",
     "behavior": "territorial"
   }
 }
