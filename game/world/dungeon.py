@@ -75,26 +75,69 @@ class Dungeon:
         self.npcs = []
         self.enemies = []
         
-        # Calculate number of entities based on level
-        num_npcs = random.randint(1, 2)
-        num_enemies = 3 + level // 2  # More enemies in deeper levels
-        
-        # Create NPCs
+        # Find stairs position
+        stairs_pos = None
+        for x in range(self.width):
+            for y in range(self.height):
+                if self.tiles[x][y] == 2:
+                    stairs_pos = (x, y)
+                    break
+            if stairs_pos:
+                break
+                
+        # Generate NPCs
+        num_npcs = random.randint(1, 3)
         for _ in range(num_npcs):
-            pos = self.get_random_floor_tile()
+            # Get a random position on a floor tile
+            while True:
+                x, y = self.get_random_floor_tile()
+                
+                # Make sure the spot is clear and not too close to stairs
+                if (self.is_position_clear(x, y) and 
+                    (stairs_pos is None or 
+                     abs(x - stairs_pos[0]) > 2 or 
+                     abs(y - stairs_pos[1]) > 2)):
+                    break
+                    
+            # Generate a new NPC
             npc = npc_generator.generate_npc(level)
-            npc.x, npc.y = pos
-            self.npcs.append(npc)
+            npc.x = x
+            npc.y = y
+            
+            # Add to entities list
             self.entities.append(npc)
+            self.npcs.append(npc)
             
-        # Create enemies
+        # Generate enemies
+        num_enemies = random.randint(2, 5 + level)
         for _ in range(num_enemies):
-            pos = self.get_random_floor_tile()
+            # Get a random position on a floor tile
+            while True:
+                x, y = self.get_random_floor_tile()
+                
+                # Make sure the spot is clear and not too close to stairs
+                if (self.is_position_clear(x, y) and 
+                    (stairs_pos is None or 
+                     abs(x - stairs_pos[0]) > 2 or 
+                     abs(y - stairs_pos[1]) > 2)):
+                    break
+                    
+            # Generate a new enemy
             enemy = npc_generator.generate_enemy(level)
-            enemy.x, enemy.y = pos
-            self.enemies.append(enemy)
-            self.entities.append(enemy)
+            enemy.x = x
+            enemy.y = y
             
+            # Add to entities list
+            self.entities.append(enemy)
+            self.enemies.append(enemy)
+            
+    def is_position_clear(self, x: int, y: int) -> bool:
+        """Check if a position is clear of entities."""
+        for entity in self.entities:
+            if entity.x == x and entity.y == y:
+                return False
+        return True
+        
     def update_entities(self, player):
         """Update all entities in the dungeon."""
         for entity in self.entities:

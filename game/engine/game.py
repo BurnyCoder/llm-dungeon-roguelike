@@ -4,6 +4,7 @@ import os
 import curses
 import argparse
 from typing import List, Dict, Any, Optional
+from collections import deque
 
 from game.engine.input_handler import InputHandler
 from game.engine.renderer import Renderer
@@ -74,12 +75,93 @@ class Game:
         map_gen = MapGenerator(width=80, height=20)
         self.dungeon = map_gen.generate_dungeon(level=self.current_level)
         
-        # Place player in a valid position
-        valid_pos = self.dungeon.get_random_floor_tile()
+        # Place player in a valid position in the first room
+        # This ensures the player starts in a location that has a path to the stairs
+        if not hasattr(map_gen, 'rooms') or not map_gen.rooms:
+            # Fallback to random position if no rooms were generated
+            valid_pos = self.dungeon.get_random_floor_tile()
+        else:
+            # Place player in the first room
+            first_room = map_gen.rooms[0]
+            center_x, center_y = first_room.center
+            valid_pos = (center_x, center_y)
+            
         self.player.x, self.player.y = valid_pos
         
         # Generate NPCs and enemies for this level
         self.dungeon.populate_entities(self.npc_generator, level=self.current_level)
+        
+        # Verify that a path exists from player to stairs
+        # Find stairs
+        stairs_pos = None
+        for x in range(self.dungeon.width):
+            for y in range(self.dungeon.height):
+                if self.dungeon.tiles[x][y] == 2:  # Stairs
+                    stairs_pos = (x, y)
+                    break
+            if stairs_pos:
+                break
+                
+        if stairs_pos:
+            # Use the path verification from map_generator
+            
+            # Verify that a path exists using BFS
+            has_path = self._verify_path((self.player.x, self.player.y), stairs_pos)
+            
+            if not has_path:
+                # Force create a path if necessary
+                self._create_direct_path((self.player.x, self.player.y), stairs_pos)
+                self.add_to_log("Emergency path to stairs created!")
+            else:
+                self.add_to_log(f"Level {self.current_level} generated with valid path to exit.")
+    
+    def _verify_path(self, start, end):
+        """
+        Use BFS to verify that a path exists from start to end.
+        Returns True if a path exists, False otherwise.
+        """
+        # Create a visited set
+        visited = set()
+        queue = deque([start])
+        
+        # Directions: up, right, down, left
+        directions = [(0, -1), (1, 0), (0, 1), (-1, 0)]
+        
+        while queue:
+            current = queue.popleft()
+            
+            if current == end:
+                return True
+                
+            if current in visited:
+                continue
+                
+            visited.add(current)
+            
+            # Check all adjacent tiles
+            for dx, dy in directions:
+                next_x, next_y = current[0] + dx, current[1] + dy
+                
+                # Check if walkable and not visited
+                if (self.dungeon.is_walkable(next_x, next_y) and 
+                    (next_x, next_y) not in visited):
+                    queue.append((next_x, next_y))
+        
+        # If queue is empty and end not found, no path exists
+        return False
+        
+    def _create_direct_path(self, start, end):
+        """Create a direct path from start to end coordinates."""
+        x1, y1 = start
+        x2, y2 = end
+        
+        # First carve horizontal tunnel
+        for x in range(min(x1, x2), max(x1, x2) + 1):
+            self.dungeon.tiles[x][y1] = 1  # Floor
+        
+        # Then carve vertical tunnel
+        for y in range(min(y1, y2), max(y1, y2) + 1):
+            self.dungeon.tiles[x2][y] = 1  # Floor
     
     def add_to_log(self, message: str):
         """Add a message to the game log."""

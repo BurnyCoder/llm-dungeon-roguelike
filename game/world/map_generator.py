@@ -1,6 +1,7 @@
 import random
 from typing import List, Tuple, Dict, Any
 from game.world.dungeon import Dungeon
+from collections import deque
 
 
 class Room:
@@ -38,6 +39,7 @@ class MapGenerator:
         self.max_rooms = 10  # Maximum number of rooms
         self.min_room_size = 5  # Minimum size of each room
         self.max_room_size = 10  # Maximum size of each room
+        self.rooms = []  # Store generated rooms for external access
         
     def generate_dungeon(self, level=0) -> Dungeon:
         """Generate a new dungeon level."""
@@ -50,7 +52,7 @@ class MapGenerator:
                 dungeon.tiles[x][y] = 0  # Wall
         
         # Generate rooms
-        rooms: List[Room] = []
+        self.rooms = []  # Reset rooms
         num_rooms = 0
         
         for r in range(self.max_rooms):
@@ -65,7 +67,7 @@ class MapGenerator:
             new_room = Room(x, y, x + w, y + h)
             
             # Check if room overlaps with existing rooms
-            for other_room in rooms:
+            for other_room in self.rooms:
                 if new_room.intersects(other_room):
                     break
             else:
@@ -73,8 +75,8 @@ class MapGenerator:
                 self._carve_room(dungeon, new_room)
                 
                 if num_rooms > 0:
-                    # Connect to previous room
-                    prev_x, prev_y = rooms[num_rooms - 1].center
+                    # Connect to previous room to ensure a path from start to end
+                    prev_x, prev_y = self.rooms[num_rooms - 1].center
                     curr_x, curr_y = new_room.center
                     
                     # Randomly decide whether to carve horizontal then vertical 
@@ -85,17 +87,36 @@ class MapGenerator:
                     else:
                         self._carve_v_tunnel(dungeon, prev_y, curr_y, prev_x)
                         self._carve_h_tunnel(dungeon, prev_x, curr_x, curr_y)
+                    
+                    # Add some additional connections for redundancy (20% chance)
+                    # This creates loops in the dungeon for more interesting navigation
+                    if num_rooms > 1 and random.random() < 0.2:
+                        # Connect to a random previous room
+                        rand_room_idx = random.randint(0, num_rooms - 1)
+                        rand_x, rand_y = self.rooms[rand_room_idx].center
+                        
+                        if random.random() < 0.5:
+                            self._carve_h_tunnel(dungeon, curr_x, rand_x, curr_y)
+                            self._carve_v_tunnel(dungeon, curr_y, rand_y, rand_x)
+                        else:
+                            self._carve_v_tunnel(dungeon, curr_y, rand_y, curr_x)
+                            self._carve_h_tunnel(dungeon, curr_x, rand_x, rand_y)
                 
-                rooms.append(new_room)
+                self.rooms.append(new_room)
                 num_rooms += 1
         
         # Place stairs down to next level
         # Place it in the last room
-        if rooms:
-            last_room = rooms[-1]
+        if self.rooms:
+            last_room = self.rooms[-1]
             sx, sy = last_room.center
             dungeon.tiles[sx][sy] = 2  # Stairs
             
+            # Verify path from first room to stairs
+            if not self._verify_path(dungeon, self.rooms[0].center, (sx, sy)):
+                # If no path exists, force create a direct path
+                self._create_direct_path(dungeon, self.rooms[0].center, (sx, sy))
+        
         # Return the generated dungeon
         return dungeon
     
@@ -113,4 +134,50 @@ class MapGenerator:
     def _carve_v_tunnel(self, dungeon, y1, y2, x):
         """Carve a vertical tunnel."""
         for y in range(min(y1, y2), max(y1, y2) + 1):
-            dungeon.tiles[x][y] = 1  # Floor 
+            dungeon.tiles[x][y] = 1  # Floor
+            
+    def _verify_path(self, dungeon, start, end):
+        """
+        Use BFS to verify that a path exists from start to end.
+        Returns True if a path exists, False otherwise.
+        """
+        # Create a visited set
+        visited = set()
+        queue = deque([start])
+        
+        # Directions: up, right, down, left
+        directions = [(0, -1), (1, 0), (0, 1), (-1, 0)]
+        
+        while queue:
+            current = queue.popleft()
+            
+            if current == end:
+                return True
+                
+            if current in visited:
+                continue
+                
+            visited.add(current)
+            
+            # Check all adjacent tiles
+            for dx, dy in directions:
+                next_x, next_y = current[0] + dx, current[1] + dy
+                
+                # Check if walkable and not visited
+                if (dungeon.is_walkable(next_x, next_y) and 
+                    (next_x, next_y) not in visited):
+                    queue.append((next_x, next_y))
+        
+        # If queue is empty and end not found, no path exists
+        return False
+        
+    def _create_direct_path(self, dungeon, start, end):
+        """Create a direct path from start to end coordinates."""
+        x1, y1 = start
+        x2, y2 = end
+        
+        # First carve horizontal tunnel
+        self._carve_h_tunnel(dungeon, x1, x2, y1)
+        
+        # Then carve vertical tunnel
+        self._carve_v_tunnel(dungeon, y1, y2, x2) 
