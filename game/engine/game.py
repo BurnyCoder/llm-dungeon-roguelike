@@ -164,32 +164,119 @@ class Game:
         """Interact with an NPC if one is adjacent to the player."""
         npc = self.dungeon.get_adjacent_npc(self.player.x, self.player.y)
         if npc:
-            dialogue = npc.talk()
-            
-            # Add NPC name as a separate line for clarity
-            self.add_to_log(f"{npc.name}:")
-            
-            # Split long dialogue into multiple log entries
-            if len(dialogue) > 70:
-                words = dialogue.split()
-                current_line = ""
+            # Initial greeting if this is the first interaction
+            if not hasattr(self, 'current_npc') or self.current_npc != npc:
+                self.current_npc = npc
                 
-                for word in words:
-                    if len(current_line) + len(word) + 1 > 70:
-                        self.add_to_log(f"  {current_line}")
-                        current_line = word
-                    else:
-                        if current_line:
-                            current_line += " " + word
-                        else:
-                            current_line = word
+                # Generate initial greeting with Claude 3.7 Sonnet
+                initial_greeting = npc.talk("*You approach the character*")
                 
-                if current_line:
-                    self.add_to_log(f"  {current_line}")
+                # Add NPC name as a separate line for clarity
+                self.add_to_log(f"{npc.name}:")
+                
+                # Split long dialogue into multiple log entries
+                self._display_dialogue(initial_greeting)
+                
+                # Prompt player for response
+                self.add_to_log("(Type your response and press Enter, or just press Enter to leave)")
+                
+                # Enter conversation mode
+                self._get_player_input()
             else:
-                self.add_to_log(f"  {dialogue}")
+                # Already in conversation with this NPC
+                self._get_player_input()
         else:
             self.add_to_log("There's no one to talk to here.")
+    
+    def _get_player_input(self):
+        """Get text input from the player for NPC conversation."""
+        if not self.renderer or not hasattr(self, 'current_npc'):
+            return
+            
+        # Save current game state
+        was_viewing_history = self.viewing_history
+        self.viewing_history = False
+        
+        # Get input from the player
+        curses.echo()  # Show typed characters
+        curses.curs_set(1)  # Show cursor
+        
+        # Create input area at the bottom of the screen
+        h, w = self.renderer.stdscr.getmaxyx()
+        input_win = curses.newwin(1, w, h-1, 0)
+        input_win.clear()
+        input_win.addstr(0, 0, "> ")
+        input_win.refresh()
+        
+        # Get player input (up to 70 chars)
+        input_str = ""
+        input_pos = 2  # Start after "> "
+        
+        while True:
+            # Render current state to keep display updated
+            self.render()
+            input_win.clear()
+            input_win.addstr(0, 0, f"> {input_str}")
+            input_win.move(0, input_pos)
+            input_win.refresh()
+            
+            # Get key
+            try:
+                key = input_win.getkey()
+            except:
+                continue
+                
+            # Process key
+            if key == "\n" or key == "\r":  # Enter key
+                break
+            elif key == "KEY_BACKSPACE" or key == "\b" or key == "\x7f":
+                if input_pos > 2:
+                    input_str = input_str[:-1]
+                    input_pos -= 1
+            elif len(input_str) < 70 and key.isprintable():
+                input_str += key
+                input_pos += 1
+                
+        # Exit input mode if input is empty
+        if not input_str.strip():
+            self.current_npc = None
+            self.add_to_log("You end the conversation.")
+        else:
+            # Get response from the NPC and display it
+            self.add_to_log(f"You: {input_str}")
+            response = self.current_npc.talk(input_str)
+            
+            self.add_to_log(f"{self.current_npc.name}:")
+            self._display_dialogue(response)
+            
+            # Continue conversation
+            self.add_to_log("(Type your response and press Enter, or just press Enter to leave)")
+            
+        # Clean up
+        curses.noecho()
+        curses.curs_set(0)  # Hide cursor
+        self.viewing_history = was_viewing_history
+    
+    def _display_dialogue(self, dialogue):
+        """Split and display dialogue in the game log."""
+        if len(dialogue) > 70:
+            words = dialogue.split()
+            current_line = ""
+            
+            for word in words:
+                if len(current_line) + len(word) + 1 > 70:
+                    self.add_to_log(f"  {current_line}")
+                    current_line = word
+                else:
+                    if current_line:
+                        current_line += " " + word
+                    else:
+                        current_line = word
+            
+            if current_line:
+                self.add_to_log(f"  {current_line}")
+        else:
+            self.add_to_log(f"  {dialogue}")
     
     def _attack_enemy(self):
         """Attack an enemy if one is adjacent to the player."""

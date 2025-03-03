@@ -1,22 +1,12 @@
 {
-  "npc_level_0_1704": {
-    "name": "Glimmer Thistlewhisk",
-    "personality": "Obsessively collects shiny objects and speaks in rhythmic patterns. Has an encyclopedic knowledge of dungeon rumors but always adds improbable embellishments. Believes dust motes are tiny messengers carrying secrets between realms and frequently pauses mid-conversation to listen to them.",
+  "npc_level_0_655": {
+    "name": "Plink Coppershriek",
+    "personality": "Plink is a profoundly enthusiastic collector of broken items, believing each shattered object contains a fragment of its owner's soul. They speak rapidly and often interrupt themselves with gasps of realization about the metaphysical properties of nearby debris. Plink experiences emotions as colors that only they can see, frequently commenting on the 'beautiful azure sadness' or 'pulsing vermillion excitement' hovering around others. Despite their eccentric nature, they possess an uncanny ability to assess the true value of items - both monetary and sentimental.",
     "dialogue": [
-      "Clink-clank, shine-shank! Trade me something bright for whispers of what lurks below? The dust tells me the third corridor holds weeping stones...*pauses to stare at floating dust*...or was it bleeding stones? All the same to those without eyes!",
-      "You smell of surface light and ignorance! *sniffs* But also courage\u2014unusual combination. I've counted seventeen adventurers this moon-cycle. Returned? Only their echoes. Want to know why? Two copper and I'll tell you what the shiny things showed me.",
-      "The walls have memories, you know. Not thoughts like you and me\u2014simpler things. Pain. Hunger. Patience. *suddenly jerks head* Did you see that? Little light-messenger just told me something about YOU. How curious that they know your fate before you do!"
+      "Oh! Oh! That cracked belt buckle you're stepping on - it's SINGING with chartreuse disappointment! Three copper for it? Please? Its previous owner died of heartbreak, I'm almost certain!",
+      "The dungeon walls are absolutely WEEPING tonight, don't you hear it? No? Hmm. Your confusion is a lovely lavender swirl, quite flattering with those boots, actually.",
+      "I trade in forgotten things, yes-yes! That sword? Functional, boring, COMPLETE. Now this bent spoon? A UNIVERSE of fractured possibilities! Which would YOU rather own? ...No, no, I wasn't actually offering the spoon. It's mine."
     ],
-    "description": "A hunched figure barely four feet tall with skin like polished marble swirled with blue and green veins. Their oversized head features three cloudy eyes\u2014two where expected and one at the center of their forehead\u2014that blink in unsynchronized patterns. Countless small shiny objects (buttons, coins, broken glass) hang from threads sewn directly into their patchwork garments, creating a constant soft tinkling sound with every movement. Their six-fingered hands constantly fidget, arranging and rearranging tiny items from the many pouches at their belt."
-  },
-  "npc_level_0_6845": {
-    "name": "Thimble Finch",
-    "personality": "Perpetually anxious timekeeper who believes the dungeon runs on a strict schedule. Obsessively winds a collection of small clocks and frequently checks sundials only he can see. Speaks in rhythmic patterns and becomes distressed when conversations exceed his arbitrary time limits.",
-    "dialogue": [
-      "Tick-tock! You're fourteen seconds behind schedule for your inevitable demise! May I suggest a more efficient route?",
-      "The shadows lengthen at precisely 4:17, that's when the walls... listen. Would you like to purchase a protective timepiece? Only three sand-grains per transaction!",
-      "Oh dear, oh dear! Your heartbeat is syncopated! That won't do for the Chronometry Collectors when they arrive. Stand still while I recalibrate your pulse with my tuning fork."
-    ],
-    "description": "A wiry humanoid with skin like yellowed parchment. Has three spindly arms, each ending in delicate fingers resembling clock hands. Wears a waistcoat made of interlocking wooden gears that softly click as he moves. His round head houses numerous small clockfaces instead of eyes, each showing a different time. A small brass pendulum swings gently beneath his chin, keeping perfect rhythm with his anxious speech."
+    "description": "Barely four feet tall with skin the pale gray of weathered limestone, Plink's hunched frame is draped in layers of patchwork clothing formed from dozens of mismatched fabric scraps. Their enormous owl-like eyes constantly dilate and contract as if adjusting to invisible light sources, while six fingers on each hand perpetually twitch and sort through the collection of broken trinkets hanging from countless pouches across their body."
   }
 }

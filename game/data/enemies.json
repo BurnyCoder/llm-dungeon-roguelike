@@ -1,26 +1,26 @@
 {
-  "enemy_level_0_2432": {
-    "name": "Glimwort",
-    "personality": "Curious and obsessively collecting. Approaches adventurers with childlike wonder, attempting to pluck off a button, lock of hair, or small item before retreating. Becomes agitated and attacks if prevented from taking its 'sample'. Hums melodically when content with its collection.",
-    "hp": 15,
-    "attack": 6,
-    "description": "A luminescent fungoid humanoid standing knee-high. Its body appears to be made of translucent amber gel with thousands of tiny blinking lights suspended within. Instead of arms, it has four tentacle-like appendages ending in delicate filaments. Wears a patchwork 'coat' made of stolen trinkets, buttons, and scraps bound together by luminous threads.",
-    "behavior": "territorial"
-  },
-  "enemy_level_0_8776": {
-    "name": "Glimmerling",
-    "personality": "Curious and playful, but easily startled. Attracted to shiny objects and will sometimes follow adventurers who carry gems or polished metal. When threatened, produces melodic sounds that can either mesmerize or cause mild confusion. Has no concept of ownership and will 'borrow' small trinkets.",
-    "hp": 15,
-    "attack": 6,
-    "description": "A translucent, crystalline entity about the size of a cat with an ever-shifting geometry of hexagonal facets. Its core pulses with soft bioluminescence that changes color based on its mood (blue when calm, yellow when curious, red when threatened). Small crystalline appendages float around it in an orbital pattern, occasionally detaching to interact with objects of interest.",
-    "behavior": "territorial"
-  },
-  "enemy_level_0_3740": {
-    "name": "Luminous Foldcrafter",
-    "personality": "Obsessively collects and reorganizes objects into geometric patterns. Communicates through shifting color patterns in its membrane. Becomes agitated when its arrangements are disturbed, but can be temporarily calmed by offering small trinkets.",
+  "enemy_level_0_6714": {
+    "name": "Mist Whisperer",
+    "personality": "Intensely curious about organic life, constantly collecting tiny samples of travelers by absorbing microscopic skin flakes. Communicates in hushed crackling sounds resembling static. Will follow adventurers at a distance, sometimes helping by clearing minor obstacles if it finds the travelers' journey 'interesting enough to document'.",
     "hp": 22,
     "attack": 7,
-    "description": "A translucent origami-like entity that hovers slightly above the ground. Its body constantly folds and unfolds along seemingly impossible angles, revealing glimpses of a glowing interior. Six thin appendages extend from its core, each ending in precise geometric tools made of crystallized light.",
+    "description": "A translucent, vaguely humanoid entity composed of roiling vapor with a faint blue-green luminescence. Three distinct denser patches of mist form what appear to be sensory organs. Small collected particles from previous encounters float suspended within its form, occasionally rearranging into rudimentary patterns that mimic nearby creatures.",
+    "behavior": "territorial"
+  },
+  "enemy_level_0_4210": {
+    "name": "Luminault",
+    "personality": "Curious and childlike, the Luminault is fascinated by reflective objects and will pause combat to investigate anything shiny. It communicates through soft bell-like tones and seems to experience emotions in reverse - laughing when injured and appearing distressed when finding treasure.",
+    "hp": 18,
+    "attack": 7,
+    "description": "A floating crystalline entity resembling a jellyfish made of translucent blue glass. Its bell-shaped body contains a pulsing light that shifts colors with its mood. Three primary tentacles end in small mirror-like surfaces that it uses to collect and redirect ambient light. Cracks along its surface reveal glimpses of a swirling starry void within.",
+    "behavior": "territorial"
+  },
+  "enemy_level_0_699": {
+    "name": "Glimmershard",
+    "personality": "Curious and obsessively collecting. Follows adventurers silently, stealing small shiny objects while humming discordant tunes. Becomes enraged if its collection is threatened, but otherwise content to observe from a distance. Can become fixated on particularly reflective armor or weapons.",
+    "hp": 18,
+    "attack": 6,
+    "description": "A crystalline humanoid standing three feet tall with a translucent body that refracts light in unpredictable patterns. Its limbs terminate in sharp prismatic points, and where a face should be is only a swirling vortex of colored light. Small stolen trinkets float suspended within its hollow interior.",
     "behavior": "territorial"
   }
 }

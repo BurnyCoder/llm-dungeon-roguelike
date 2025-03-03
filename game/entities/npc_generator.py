@@ -13,18 +13,25 @@ from game.entities.npc import NPC, Enemy
 
 # Templates for NPC/enemy generation
 NPC_PROMPT_TEMPLATE = """
-Generate a unique NPC for a roguelike fantasy game. The NPC should have:
+Generate a unique NPC for a roguelike fantasy dungeon game. The NPC should have:
 - A creative name
-- A distinct unique and interesting personality, potentially alien
-- 3-5 dialogue options that reflect their personality
-- A brief physical description, try to create alien looking or unique looking NPC
+- A distinct unique and interesting personality (3-5 sentences), potentially alien or unusual
+- 3-5 sample dialogue options that reflect their personality
+- A detailed physical description (2-3 sentences) - try to create alien or unique looking NPCs
 
 NPC should be appropriate for dungeon level {level} (higher level = more exotic/unusual).
+
+Think about the NPC's:
+- Background/origin
+- Motivations and goals
+- Quirks, speech patterns, or mannerisms
+- Emotional state or outlook
+- Relationship to other dungeon dwellers
 
 Return the result as a JSON object with the following structure:
 {{
   "name": "NPC's name",
-  "personality": "Brief description of personality",
+  "personality": "Detailed description of personality",
   "dialogue": ["Dialogue line 1", "Dialogue line 2", "Dialogue line 3"],
   "description": "Physical description"
 }}
@@ -165,7 +172,8 @@ class NPCGenerator:
         return NPC(
             name=npc_data.get("name", f"NPC Level {level}"),
             personality=npc_data.get("personality", "Mysterious"),
-            dialogue=npc_data.get("dialogue", ["Hello, adventurer."])
+            dialogue=npc_data.get("dialogue", ["Hello, adventurer."]),
+            description=npc_data.get("description", "A mysterious figure.")
         )
     
     def generate_enemy(self, level: int = 1) -> Enemy:
@@ -243,7 +251,8 @@ class NPCGenerator:
                 "Welcome, traveler.",
                 "These dungeons hold many secrets.",
                 "Be careful as you venture deeper."
-            ]
+            ],
+            description="A cloaked figure with glowing eyes, watching you carefully."
         )
     
     def _create_default_enemy(self, level: int) -> Enemy:

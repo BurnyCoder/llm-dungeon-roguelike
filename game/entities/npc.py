@@ -1,11 +1,12 @@
 import random
 from game.entities.entity import Entity
+import portkey
 
 
 class NPC(Entity):
     """Non-player character class."""
     
-    def __init__(self, name, x=0, y=0, personality=None, dialogue=None):
+    def __init__(self, name, x=0, y=0, personality=None, dialogue=None, description=None):
         super().__init__(
             name=name,
             char="N",
@@ -17,18 +18,76 @@ class NPC(Entity):
         )
         self.personality = personality or "Neutral"
         self.dialogue = dialogue or ["Hello, adventurer."]
+        self.description = description or "A mysterious figure."
         self.current_dialogue_index = 0
         self.move_cooldown = 0
         self.move_cooldown_max = 5
+        # Add conversation memory
+        self.conversation_history = []
         
-    def talk(self):
-        """Return the current dialogue line."""
-        if not self.dialogue:
-            return "..."
+    def talk(self, player_query=None):
+        """
+        Return dialogue line.
+        If player_query is provided, generate a response using Claude 3.7 Sonnet.
+        Otherwise, return the next predefined dialogue line.
+        """
+        if player_query is None:
+            # No query provided, use predefined dialogue
+            if not self.dialogue:
+                return "..."
+                
+            line = self.dialogue[self.current_dialogue_index]
+            self.current_dialogue_index = (self.current_dialogue_index + 1) % len(self.dialogue)
+            return line
+        else:
+            # Use Claude 3.7 Sonnet to generate a response
+            prompt = self._build_npc_prompt(player_query)
+            response = portkey.claude37sonnet(prompt)
             
-        line = self.dialogue[self.current_dialogue_index]
-        self.current_dialogue_index = (self.current_dialogue_index + 1) % len(self.dialogue)
-        return line
+            # Add to conversation history
+            self.conversation_history.append({"query": player_query, "response": response})
+            
+            return response
+    
+    def _build_npc_prompt(self, player_query):
+        """Build a prompt for Claude based on NPC personality and conversation history."""
+        is_initial_greeting = player_query == "*You approach the character*"
+        
+        prompt = f"""
+You are roleplaying as {self.name}, a character in a fantasy roguelike dungeon game.
+
+Character details:
+- Name: {self.name}
+- Personality: {self.personality}
+- Description: {self.description}
+
+Game context:
+You are a character in a dungeon. The player character is an adventurer exploring this dungeon.
+{'' if not is_initial_greeting else 'This is your first interaction with the player, so greet them appropriately based on your personality.'}
+
+Respond to the player's query in character, using first person perspective. 
+Keep your response concise (1-3 sentences). Stay in character at all times.
+Don't use any markers like "Character:" or quotation marks in your response.
+Your personality should strongly influence how you respond.
+
+Conversation history:
+"""
+        
+        # Add conversation history if it exists
+        if self.conversation_history:
+            for i, exchange in enumerate(self.conversation_history[-3:]):  # Include last 3 exchanges at most
+                prompt += f"Player: {exchange['query']}\n"
+                prompt += f"You: {exchange['response']}\n\n"
+        
+        # Add the current query, but handle initial greeting differently
+        if is_initial_greeting:
+            prompt += "Player has just approached you for the first time.\n"
+            prompt += "You: "
+        else:
+            prompt += f"Player: {player_query}\n"
+            prompt += "You: "
+        
+        return prompt
         
     def update(self, player):
         """Update NPC behavior."""
