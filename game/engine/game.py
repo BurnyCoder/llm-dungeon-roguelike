@@ -28,7 +28,7 @@ class Game:
             save_generated=save_characters
         )
         self.game_log = []
-        self.max_log_size = 30
+        self.max_log_size = 100
         self.use_pregenerated = use_pregenerated
         self.save_characters = save_characters
         self.viewing_history = False
@@ -98,9 +98,11 @@ class Game:
             
         # Handle navigation in history view
         if key == "KEY_UP" and self.history_offset < len(self.game_log) - 10:
-            self.history_offset += 1
+            # Scroll larger amounts with UP key
+            self.history_offset += 5
         elif key == "KEY_DOWN" and self.history_offset > 0:
-            self.history_offset -= 1
+            # Scroll larger amounts with DOWN key
+            self.history_offset = max(0, self.history_offset - 5)
         elif key == "ESCAPE":
             # Exit history view
             self.viewing_history = False
@@ -259,24 +261,26 @@ class Game:
     
     def _display_dialogue(self, dialogue):
         """Split and display dialogue in the game log."""
-        if len(dialogue) > 70:
-            words = dialogue.split()
-            current_line = ""
-            
-            for word in words:
-                if len(current_line) + len(word) + 1 > 70:
-                    self.add_to_log(f"  {current_line}")
-                    current_line = word
-                else:
-                    if current_line:
-                        current_line += " " + word
-                    else:
-                        current_line = word
-            
-            if current_line:
+        # Break longer dialogue into manageable chunks to ensure everything is displayed
+        words = dialogue.split()
+        current_line = ""
+        
+        for word in words:
+            # If adding this word would exceed the line limit
+            if len(current_line) + len(word) + 1 > 70:
+                # Add the current line to the log and start a new one
                 self.add_to_log(f"  {current_line}")
-        else:
-            self.add_to_log(f"  {dialogue}")
+                current_line = word
+            else:
+                # Add the word to the current line
+                if current_line:
+                    current_line += " " + word
+                else:
+                    current_line = word
+        
+        # Make sure to add the last line if there's anything left
+        if current_line:
+            self.add_to_log(f"  {current_line}")
     
     def _attack_enemy(self):
         """Attack an enemy if one is adjacent to the player."""
@@ -324,8 +328,8 @@ class Game:
         
         # Render UI
         if self.viewing_history:
-            # Display history view with offset
-            history_view = self.game_log[-min(len(self.game_log), 20+self.history_offset):-self.history_offset] if self.history_offset > 0 else self.game_log[-min(len(self.game_log), 20):]
+            # Display history view with offset - increased from 20 to 30 lines
+            history_view = self.game_log[-min(len(self.game_log), 30+self.history_offset):-self.history_offset] if self.history_offset > 0 else self.game_log[-min(len(self.game_log), 30):]
             self.renderer.draw_ui(
                 player=self.player,
                 dungeon_level=self.current_level + 1,
@@ -336,7 +340,7 @@ class Game:
             self.renderer.draw_ui(
                 player=self.player,
                 dungeon_level=self.current_level + 1,
-                log=self.game_log
+                log=self.game_log[-min(len(self.game_log), 20):]  # Only show the most recent 20 lines in normal view
             )
         
         self.renderer.refresh()

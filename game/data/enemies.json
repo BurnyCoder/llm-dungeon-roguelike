@@ -1,26 +1,26 @@
 {
-  "enemy_level_0_6714": {
-    "name": "Mist Whisperer",
-    "personality": "Intensely curious about organic life, constantly collecting tiny samples of travelers by absorbing microscopic skin flakes. Communicates in hushed crackling sounds resembling static. Will follow adventurers at a distance, sometimes helping by clearing minor obstacles if it finds the travelers' journey 'interesting enough to document'.",
-    "hp": 22,
-    "attack": 7,
-    "description": "A translucent, vaguely humanoid entity composed of roiling vapor with a faint blue-green luminescence. Three distinct denser patches of mist form what appear to be sensory organs. Small collected particles from previous encounters float suspended within its form, occasionally rearranging into rudimentary patterns that mimic nearby creatures.",
-    "behavior": "territorial"
-  },
-  "enemy_level_0_4210": {
-    "name": "Luminault",
-    "personality": "Curious and childlike, the Luminault is fascinated by reflective objects and will pause combat to investigate anything shiny. It communicates through soft bell-like tones and seems to experience emotions in reverse - laughing when injured and appearing distressed when finding treasure.",
+  "enemy_level_0_7250": {
+    "name": "Whisperlamp",
+    "personality": "Curious and methodical, it's attracted to sounds and movement patterns it hasn't cataloged before. It will follow adventurers at a distance, recording their behaviors with soft clicks and luminescent pulses. If threatened, it releases stored sound as weaponized echoes. Oddly, it seems to be conducting some form of research.",
     "hp": 18,
     "attack": 7,
-    "description": "A floating crystalline entity resembling a jellyfish made of translucent blue glass. Its bell-shaped body contains a pulsing light that shifts colors with its mood. Three primary tentacles end in small mirror-like surfaces that it uses to collect and redirect ambient light. Cracks along its surface reveal glimpses of a swirling starry void within.",
+    "description": "A floating gelatinous orb about the size of a human head, containing suspended crystalline structures that glow with soft blue-green light. Thin tendrils of light occasionally extend from its body, retracting when touched. Its translucent body reveals shadow-like movements inside that don't correspond to anything in the external environment.",
     "behavior": "territorial"
   },
-  "enemy_level_0_699": {
-    "name": "Glimmershard",
-    "personality": "Curious and obsessively collecting. Follows adventurers silently, stealing small shiny objects while humming discordant tunes. Becomes enraged if its collection is threatened, but otherwise content to observe from a distance. Can become fixated on particularly reflective armor or weapons.",
+  "enemy_level_0_6042": {
+    "name": "Whisperleaf",
+    "personality": "Curious and melodic, the Whisperleaf is fascinated by adventurers rather than automatically hostile. It communicates through subtle leaf vibrations that create haunting tunes. It attacks only when touched or when it witnesses violence, seeing itself as a guardian of peaceful energy exchanges in the dungeon.",
     "hp": 18,
     "attack": 6,
-    "description": "A crystalline humanoid standing three feet tall with a translucent body that refracts light in unpredictable patterns. Its limbs terminate in sharp prismatic points, and where a face should be is only a swirling vortex of colored light. Small stolen trinkets float suspended within its hollow interior.",
+    "description": "A spindly humanoid figure composed of translucent green fibers with tiny leaves sprouting along its limbs. Its 'face' is a hollow depression with swirling mist inside, occasionally forming simple expressions. Small root-like tendrils serve as feet, leaving tiny fluorescent marks that fade after minutes.",
+    "behavior": "territorial"
+  },
+  "enemy_level_0_3822": {
+    "name": "Whispering Inksmudge",
+    "personality": "Manifests from forgotten tales and discarded manuscripts. Obsessively collects snippets of language, repeating overheard phrases back in distorted echoes. Shows unusual fascination with adventurers' journals and will temporarily retreat to 'digest' new words it encounters.",
+    "hp": 18,
+    "attack": 7,
+    "description": "A shimmering, semi-transparent entity resembling spilled ink that's gained sentience. Its form constantly shifts between vaguely humanoid and abstract calligraphy. Small pieces of parchment orbit its core, and written words occasionally materialize briefly across its surface before dissolving back into its inky body.",
     "behavior": "territorial"
   }
 }

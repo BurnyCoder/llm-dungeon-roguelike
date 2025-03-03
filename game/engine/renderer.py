@@ -14,7 +14,7 @@ class Renderer:
         self.game_height = 20
         
         # UI dimensions
-        self.ui_height = 8  # Increased from 5 to 8 for more log lines
+        self.ui_height = 10  # Increased for more log lines
         
         # Calculate offsets to center the game view
         self.offset_y = 0
@@ -73,9 +73,11 @@ class Renderer:
         self.draw_string(2, stats_y, hp_text)
         self.draw_string(self.game_width - len(level_text) - 2, stats_y, level_text)
         
-        # Draw game log - now showing more lines
+        # Draw game log - showing more lines
         log_y = stats_y + 1
-        max_display_lines = 6  # Increased from 3 to 6
+        # Dynamically determine max lines based on terminal height
+        available_space = self.height - log_y - 1
+        max_display_lines = min(available_space, 8)  # Show up to 8 lines if space permits
         
         for i, message in enumerate(log[-max_display_lines:]):  # Show last N messages
             if i < max_display_lines:  # Ensure we don't overflow

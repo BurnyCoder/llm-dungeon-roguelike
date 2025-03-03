@@ -1,12 +1,12 @@
 {
-  "npc_level_0_655": {
-    "name": "Plink Coppershriek",
-    "personality": "Plink is a profoundly enthusiastic collector of broken items, believing each shattered object contains a fragment of its owner's soul. They speak rapidly and often interrupt themselves with gasps of realization about the metaphysical properties of nearby debris. Plink experiences emotions as colors that only they can see, frequently commenting on the 'beautiful azure sadness' or 'pulsing vermillion excitement' hovering around others. Despite their eccentric nature, they possess an uncanny ability to assess the true value of items - both monetary and sentimental.",
+  "npc_level_0_4130": {
+    "name": "Grundle Tinktock",
+    "personality": "Grundle is a neurotically meticulous timekeeper who believes every dungeon should run on a proper schedule. He obsessively counts seconds under his breath and becomes visibly agitated when adventurers arrive 'off-timetable.' Despite his fussy nature, he harbors a secret fascination with chaos magic and occasionally lets small temporal anomalies occur around him just to secretly enjoy the unpredictability. Grundle maintains an elaborate fiction that he works for a 'Dungeon Management Authority' that doesn't actually exist.",
     "dialogue": [
-      "Oh! Oh! That cracked belt buckle you're stepping on - it's SINGING with chartreuse disappointment! Three copper for it? Please? Its previous owner died of heartbreak, I'm almost certain!",
-      "The dungeon walls are absolutely WEEPING tonight, don't you hear it? No? Hmm. Your confusion is a lovely lavender swirl, quite flattering with those boots, actually.",
-      "I trade in forgotten things, yes-yes! That sword? Functional, boring, COMPLETE. Now this bent spoon? A UNIVERSE of fractured possibilities! Which would YOU rather own? ...No, no, I wasn't actually offering the spoon. It's mine."
+      "Tsk! You're precisely eighteen minutes and forty-three seconds behind schedule! I'll have to rearrange the entire afternoon's monster rotations now!",
+      "One moment please\u2014*pulls out intricate brass pocket watch and winds it carefully*\u2014ah yes, you may proceed to be imperiled now. Do try to scream efficiently.",
+      "The Management insists all heroic epiphanies be recorded in triplicate. Do you have the proper forms? No? *sighs dramatically* I suppose I can loan you mine, but I'll need them back before the gelatinous cubes' lunch break."
     ],
-    "description": "Barely four feet tall with skin the pale gray of weathered limestone, Plink's hunched frame is draped in layers of patchwork clothing formed from dozens of mismatched fabric scraps. Their enormous owl-like eyes constantly dilate and contract as if adjusting to invisible light sources, while six fingers on each hand perpetually twitch and sort through the collection of broken trinkets hanging from countless pouches across their body."
+    "description": "A hunched, wiry figure with pale green skin and tufts of white hair sprouting in organized patches across his scalp like precisely planted garden rows. Grundle wears a waistcoat adorned with dozens of tiny pockets, each containing a different timekeeping device, and his large, protruding eyes constantly dart between his watches and a leather-bound ledger he clutches to his chest."
   }
 }
