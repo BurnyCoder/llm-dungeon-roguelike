@@ -134,10 +134,8 @@ class Game:
             self._try_move(1, 0)
         
         # Interaction
-        elif key == 't':  # Talk
-            self._interact_with_npc()
-        elif key == 'c':  # Chat with enemy
-            self._interact_with_enemy()
+        elif key == 't':  # Talk to NPCs or enemies
+            self._talk_to_character()
         elif key == 'f':  # Fight
             self._attack_enemy()
         elif key == 's':  # Save characters (manual save)
@@ -148,7 +146,7 @@ class Game:
                 self.add_to_log("Character saving is not enabled.")
         elif key == 'h':  # View dialogue history
             self._view_dialogue_history()
-            
+    
     def _try_move(self, dx, dy):
         """Try to move the player by delta x and y."""
         new_x = self.player.x + dx
@@ -165,33 +163,85 @@ class Game:
                 self.add_to_log(f"Descending to dungeon level {self.current_level + 1}...")
                 self._generate_new_level()
     
-    def _interact_with_npc(self):
-        """Interact with an NPC if one is adjacent to the player."""
+    def _talk_to_character(self):
+        """Interact with an NPC or enemy if one is adjacent to the player."""
+        # First check for NPCs
         npc = self.dungeon.get_adjacent_npc(self.player.x, self.player.y)
         if npc:
-            # Initial greeting if this is the first interaction
-            if not hasattr(self, 'current_npc') or self.current_npc != npc:
-                self.current_npc = npc
+            self._interact_with_npc(npc)
+            return
+            
+        # Then check for enemies
+        enemy = self.dungeon.get_adjacent_enemy(self.player.x, self.player.y)
+        if enemy:
+            self._interact_with_enemy(enemy)
+            return
+            
+        # No one to talk to
+        self.add_to_log("There's no one to talk to here.")
+    
+    def _interact_with_npc(self, npc=None):
+        """Interact with an NPC."""
+        # If no NPC is provided, try to get one from the player's position
+        if npc is None:
+            npc = self.dungeon.get_adjacent_npc(self.player.x, self.player.y)
+            if not npc:
+                self.add_to_log("There's no NPC to talk to here.")
+                return
                 
-                # Generate initial greeting with Claude 3.7 Sonnet
-                initial_greeting = npc.talk("*You approach the character*")
-                
-                # Add NPC name as a separate line for clarity
-                self.add_to_log(f"{npc.name}:")
-                
-                # Split long dialogue into multiple log entries
-                self._display_dialogue(initial_greeting)
-                
-                # Prompt player for response
-                self.add_to_log("(Type your response and press Enter, or just press Enter to leave)")
-                
-                # Enter conversation mode
-                self._get_player_input()
-            else:
-                # Already in conversation with this NPC
-                self._get_player_input()
+        # Initial greeting if this is the first interaction
+        if not hasattr(self, 'current_npc') or self.current_npc != npc:
+            self.current_npc = npc
+            
+            # Generate initial greeting with Claude 3.7 Sonnet
+            initial_greeting = npc.talk("*You approach the character*")
+            
+            # Add NPC name as a separate line for clarity
+            self.add_to_log(f"{npc.name}:")
+            
+            # Split long dialogue into multiple log entries
+            self._display_dialogue(initial_greeting)
+            
+            # Prompt player for response
+            self.add_to_log("(Type your response and press Enter, or just press Enter to leave)")
+            
+            # Enter conversation mode
+            self._get_player_input()
         else:
-            self.add_to_log("There's no one to talk to here.")
+            # Already in conversation with this NPC
+            self._get_player_input()
+    
+    def _interact_with_enemy(self, enemy=None):
+        """Interact with an enemy."""
+        # If no enemy is provided, try to get one from the player's position
+        if enemy is None:
+            enemy = self.dungeon.get_adjacent_enemy(self.player.x, self.player.y)
+            if not enemy:
+                self.add_to_log("There's no enemy to talk to here.")
+                return
+                
+        # Initial greeting if this is the first interaction
+        if not hasattr(self, 'current_enemy') or self.current_enemy != enemy:
+            self.current_enemy = enemy
+            
+            # Generate initial greeting with Claude 3.7 Sonnet
+            initial_greeting = enemy.talk("*You approach the enemy*")
+            
+            # Add enemy name as a separate line for clarity
+            self.add_to_log(f"{enemy.name}:")
+            
+            # Split long dialogue into multiple log entries
+            self._display_dialogue(initial_greeting)
+            
+            # Prompt player for response
+            self.add_to_log("(Type your response and press Enter, or just press Enter to leave)")
+            self.add_to_log("(WARNING: Talking does not prevent combat!)")
+            
+            # Enter conversation mode
+            self._get_player_input_enemy()
+        else:
+            # Already in conversation with this enemy
+            self._get_player_input_enemy()
     
     def _get_player_input(self):
         """Get text input from the player for NPC conversation."""
@@ -262,81 +312,6 @@ class Game:
         curses.curs_set(0)  # Hide cursor
         self.viewing_history = was_viewing_history
     
-    def _display_dialogue(self, dialogue):
-        """Split and display dialogue in the game log."""
-        # Break longer dialogue into manageable chunks to ensure everything is displayed
-        words = dialogue.split()
-        current_line = ""
-        
-        for word in words:
-            # If adding this word would exceed the line limit
-            if len(current_line) + len(word) + 1 > 70:
-                # Add the current line to the log and start a new one
-                self.add_to_log(f"  {current_line}")
-                current_line = word
-            else:
-                # Add the word to the current line
-                if current_line:
-                    current_line += " " + word
-                else:
-                    current_line = word
-        
-        # Make sure to add the last line if there's anything left
-        if current_line:
-            self.add_to_log(f"  {current_line}")
-    
-    def _attack_enemy(self):
-        """Attack an enemy if one is adjacent to the player."""
-        enemy = self.dungeon.get_adjacent_enemy(self.player.x, self.player.y)
-        if enemy:
-            damage = self.player.attack
-            enemy.hp -= damage
-            self.add_to_log(f"You attack {enemy.name} for {damage} damage!")
-            
-            if enemy.hp <= 0:
-                self.add_to_log(f"You defeated {enemy.name}!")
-                self.dungeon.remove_entity(enemy)
-            else:
-                # Enemy counterattack
-                player_damage = enemy.attack
-                self.player.hp -= player_damage
-                self.add_to_log(f"{enemy.name} attacks you for {player_damage} damage!")
-                
-                if self.player.hp <= 0:
-                    self.add_to_log("You have been defeated!")
-                    self.running = False
-        else:
-            self.add_to_log("There's no enemy to attack here.")
-            
-    def _interact_with_enemy(self):
-        """Interact with an enemy if one is adjacent to the player."""
-        enemy = self.dungeon.get_adjacent_enemy(self.player.x, self.player.y)
-        if enemy:
-            # Initial greeting if this is the first interaction
-            if not hasattr(self, 'current_enemy') or self.current_enemy != enemy:
-                self.current_enemy = enemy
-                
-                # Generate initial greeting with Claude 3.7 Sonnet
-                initial_greeting = enemy.talk("*You approach the enemy*")
-                
-                # Add enemy name as a separate line for clarity
-                self.add_to_log(f"{enemy.name}:")
-                
-                # Split long dialogue into multiple log entries
-                self._display_dialogue(initial_greeting)
-                
-                # Prompt player for response
-                self.add_to_log("(Type your response and press Enter, or just press Enter to leave)")
-                self.add_to_log("(WARNING: Talking does not prevent combat!)")
-                
-                # Enter conversation mode
-                self._get_player_input_enemy()
-            else:
-                # Already in conversation with this enemy
-                self._get_player_input_enemy()
-        else:
-            self.add_to_log("There's no enemy to talk to here.")
-    
     def _get_player_input_enemy(self):
         """Get text input from the player for enemy conversation."""
         if not self.renderer or not hasattr(self, 'current_enemy'):
@@ -406,6 +381,52 @@ class Game:
         curses.curs_set(0)  # Hide cursor
         self.viewing_history = was_viewing_history
     
+    def _display_dialogue(self, dialogue):
+        """Split and display dialogue in the game log."""
+        # Break longer dialogue into manageable chunks to ensure everything is displayed
+        words = dialogue.split()
+        current_line = ""
+        
+        for word in words:
+            # If adding this word would exceed the line limit
+            if len(current_line) + len(word) + 1 > 70:
+                # Add the current line to the log and start a new one
+                self.add_to_log(f"  {current_line}")
+                current_line = word
+            else:
+                # Add the word to the current line
+                if current_line:
+                    current_line += " " + word
+                else:
+                    current_line = word
+        
+        # Make sure to add the last line if there's anything left
+        if current_line:
+            self.add_to_log(f"  {current_line}")
+    
+    def _attack_enemy(self):
+        """Attack an enemy if one is adjacent to the player."""
+        enemy = self.dungeon.get_adjacent_enemy(self.player.x, self.player.y)
+        if enemy:
+            damage = self.player.attack
+            enemy.hp -= damage
+            self.add_to_log(f"You attack {enemy.name} for {damage} damage!")
+            
+            if enemy.hp <= 0:
+                self.add_to_log(f"You defeated {enemy.name}!")
+                self.dungeon.remove_entity(enemy)
+            else:
+                # Enemy counterattack
+                player_damage = enemy.attack
+                self.player.hp -= player_damage
+                self.add_to_log(f"{enemy.name} attacks you for {player_damage} damage!")
+                
+                if self.player.hp <= 0:
+                    self.add_to_log("You have been defeated!")
+                    self.running = False
+        else:
+            self.add_to_log("There's no enemy to attack here.")
+            
     def update(self):
         """Update game state."""
         # AI updates for NPCs and enemies
