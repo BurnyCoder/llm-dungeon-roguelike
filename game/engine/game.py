@@ -292,10 +292,16 @@ class Game:
                 input_str += key
                 input_pos += 1
                 
+        # Clean up input mode
+        curses.noecho()
+        curses.curs_set(0)  # Hide cursor
+        self.viewing_history = was_viewing_history
+                
         # Exit input mode if input is empty
         if not input_str.strip():
             self.current_npc = None
             self.add_to_log("You end the conversation.")
+            return
         else:
             # Get response from the NPC and display it
             self.add_to_log(f"You: {input_str}")
@@ -307,10 +313,8 @@ class Game:
             # Continue conversation
             self.add_to_log("(Type your response and press Enter, or just press Enter to leave)")
             
-        # Clean up
-        curses.noecho()
-        curses.curs_set(0)  # Hide cursor
-        self.viewing_history = was_viewing_history
+            # Recursively call this function to continue the conversation
+            self._get_player_input()
     
     def _get_player_input_enemy(self):
         """Get text input from the player for enemy conversation."""
@@ -360,11 +364,17 @@ class Game:
             elif len(input_str) < 70 and key.isprintable():
                 input_str += key
                 input_pos += 1
+        
+        # Clean up input mode
+        curses.noecho()
+        curses.curs_set(0)  # Hide cursor
+        self.viewing_history = was_viewing_history
                 
         # Exit input mode if input is empty
         if not input_str.strip():
             self.current_enemy = None
             self.add_to_log("You end the conversation.")
+            return
         else:
             # Get response from the enemy and display it
             self.add_to_log(f"You: {input_str}")
@@ -376,10 +386,8 @@ class Game:
             # Continue conversation
             self.add_to_log("(Type your response and press Enter, or just press Enter to leave)")
             
-        # Clean up
-        curses.noecho()
-        curses.curs_set(0)  # Hide cursor
-        self.viewing_history = was_viewing_history
+            # Recursively call this function to continue the conversation
+            self._get_player_input_enemy()
     
     def _display_dialogue(self, dialogue):
         """Split and display dialogue in the game log."""
