@@ -102,6 +102,18 @@ Character data is saved automatically when new characters are generated and when
 - Modify NPC and enemy generation prompts in `game/entities/npc_generator.py`
 - Change dungeon generation parameters in `game/world/map_generator.py`
 
+## TODO
+
+- Fix error with broken LLM generation of characters caching
+- Add direct Claude API support and other providers
+- Improve logical level generation
+- Implement strategic enemy movement (enemies blocking entrance to next level)
+- Add AI-generated loot drops from enemies
+- Generate visual images of enemies using AI
+- Future enhancements:
+  - AI-generated videos
+  - AI-generated objects for game engines
+
 ## License
 
 MIT License
@@ -110,3 +122,4 @@ MIT License
 
 - This project uses [Portkey](https://portkey.ai/) to access Claude 3.7 Sonnet from Anthropic
 - Built using Python's curses library for terminal rendering 
+
