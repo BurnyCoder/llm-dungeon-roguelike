@@ -8,6 +8,7 @@ Usage:
   python main.py                        # Generate and save new characters with Claude
   python main.py --no-save-characters   # Generate characters without saving them
   python main.py --use-pregenerated     # Use pre-generated characters instead of generating new ones
+  python main.py --philosophical-mode    # Generate characters who discuss advanced STEM/philosophical concepts
   
 Controls:
   Arrow keys: Move the player character

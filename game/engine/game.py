@@ -17,7 +17,7 @@ from game.world.map_generator import MapGenerator
 class Game:
     """Main game engine class that manages the game state and loop."""
     
-    def __init__(self, use_pregenerated=False, save_characters=True):
+    def __init__(self, use_pregenerated=False, save_characters=True, philosophical_mode=False):
         self.running = False
         self.player = None
         self.dungeon = None
@@ -26,12 +26,14 @@ class Game:
         self.renderer = None
         self.npc_generator = NPCGenerator(
             use_pregenerated=use_pregenerated, 
-            save_generated=save_characters
+            save_generated=save_characters,
+            philosophical_mode=philosophical_mode
         )
         self.game_log = []
         self.max_log_size = 100
         self.use_pregenerated = use_pregenerated
         self.save_characters = save_characters
+        self.philosophical_mode = philosophical_mode
         self.viewing_history = False
         self.history_offset = 0
         
@@ -67,6 +69,10 @@ class Game:
             self.add_to_log("Generating new characters with Claude 3.7 Sonnet.")
             if self.save_characters:
                 self.add_to_log("Characters will be saved for future use.")
+        
+        # Log philosophical mode if enabled
+        if self.philosophical_mode:
+            self.add_to_log("Philosophical mode ACTIVATED: Characters will discuss advanced STEM and philosophical concepts.")
         
         self.add_to_log("Use arrow keys to move, 't' to talk, 'f' to fight, 'q' to quit.")
     
@@ -589,6 +595,11 @@ def parse_arguments():
         action="store_true", 
         help="Disable saving generated characters to files"
     )
+    parser.add_argument(
+        "--philosophical-mode",
+        action="store_true",
+        help="Generate characters that discuss advanced STEM/philosophical concepts"
+    )
     return parser.parse_args()
 
 
@@ -597,7 +608,8 @@ def main():
     args = parse_arguments()
     game = Game(
         use_pregenerated=args.use_pregenerated,
-        save_characters=not args.no_save_characters
+        save_characters=not args.no_save_characters,
+        philosophical_mode=args.philosophical_mode
     )
     curses.wrapper(game.run)
 

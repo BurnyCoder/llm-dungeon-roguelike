@@ -59,16 +59,72 @@ Return the result as a JSON object with the following structure:
 Be creative and avoid generic fantasy tropes.
 """
 
+# Add the philosophical prompt templates right after the existing templates
+
+PHILOSOPHICAL_NPC_PROMPT_TEMPLATE = """
+Generate a unique NPC for a roguelike fantasy dungeon game who is a highly intellectual, philosophical character obsessed with advanced STEM concepts. The NPC should have:
+- A creative name suggesting intellectual brilliance
+- A distinct personality that portrays them as a deep thinker about the cosmos, mathematics, physics, intelligence, and complex philosophical concepts
+- 3-5 sample dialogue options that showcase their intellectual depth, using advanced terminology from mathematics, physics, philosophy of mind, etc.
+- A detailed physical description (2-3 sentences) - they should appear scholarly or otherworldly
+
+NPC should be appropriate for dungeon level {level} (higher level = more exotic/unusual).
+
+Their dialogue should reference some of these themes:
+- Complex mathematical theorems or equations (like Riemann hypothesis, P vs NP, etc.)
+- Advanced physics concepts (quantum mechanics, relativity, string theory)
+- Philosophical explorations of consciousness and intelligence
+- Cosmological theories and the nature of reality
+- Profound metaphysical questions
+
+Return the result as a JSON object with the following structure:
+{{
+  "name": "NPC's name",
+  "personality": "Detailed description of personality",
+  "dialogue": ["Dialogue line 1", "Dialogue line 2", "Dialogue line 3"],
+  "description": "Physical description"
+}}
+
+Make sure the character seems genuinely intellectual rather than pretentious - they should be passionate about knowledge and deep understanding.
+"""
+
+PHILOSOPHICAL_ENEMY_PROMPT_TEMPLATE = """
+Generate a unique enemy for a roguelike fantasy game who is intellectually sophisticated but hostile. The enemy should have:
+- A creative name suggesting intellectual brilliance and threat
+- A personality portraying them as a being with deep knowledge of advanced STEM/philosophical concepts, but using this knowledge with malicious intent
+- Combat abilities appropriate for dungeon level {level} (higher = more powerful)
+- A brief physical description that makes them appear scholarly but dangerous
+
+Their combat approach and personality should reference:
+- Complex mathematical or logical constructs
+- Advanced physics theories or quantum mechanics
+- Philosophical paradoxes or metaphysical concepts
+- Consciousness and intelligence theories
+
+Return the result as a JSON object with the following structure:
+{{
+  "name": "Enemy's name",
+  "personality": "Brief description of intellectual/philosophical personality",
+  "hp": number between 10-50 based on level,
+  "attack": number between 5-15 based on level,
+  "description": "Physical description",
+  "behavior": "aggressive", "territorial", "ambusher", "cowardly", or "pack"
+}}
+
+Make the enemy genuinely intellectual rather than simply pretentious - they should have authentic knowledge but use it for questionable purposes.
+"""
+
 
 class NPCGenerator:
     """Generates NPCs and enemies using LLMs."""
     
-    def __init__(self, use_pregenerated=False, save_generated=True):
+    def __init__(self, use_pregenerated=False, save_generated=True, philosophical_mode=False):
         # Cache generated NPCs/enemies to avoid redundant API calls during testing
         self.npc_cache = {}
         self.enemy_cache = {}
         self.use_pregenerated = use_pregenerated
         self.save_generated = save_generated
+        self.philosophical_mode = philosophical_mode
         
         # Paths for saved characters
         self.data_dir = Path(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../game/data')))
@@ -147,8 +203,12 @@ class NPCGenerator:
         if cache_key in self.npc_cache:
             npc_data = self.npc_cache[cache_key]
         else:
-            # Generate NPC using LLM
-            prompt = NPC_PROMPT_TEMPLATE.format(level=level)
+            # Generate NPC using LLM with the appropriate template
+            if self.philosophical_mode:
+                prompt = PHILOSOPHICAL_NPC_PROMPT_TEMPLATE.format(level=level)
+            else:
+                prompt = NPC_PROMPT_TEMPLATE.format(level=level)
+                
             try:
                 response = claude37sonnet(prompt)
                 # Extract JSON from response
@@ -195,8 +255,12 @@ class NPCGenerator:
         if cache_key in self.enemy_cache:
             enemy_data = self.enemy_cache[cache_key]
         else:
-            # Generate enemy using LLM
-            prompt = ENEMY_PROMPT_TEMPLATE.format(level=level)
+            # Generate enemy using LLM with the appropriate template
+            if self.philosophical_mode:
+                prompt = PHILOSOPHICAL_ENEMY_PROMPT_TEMPLATE.format(level=level)
+            else:
+                prompt = ENEMY_PROMPT_TEMPLATE.format(level=level)
+                
             try:
                 response = claude37sonnet(prompt)
                 # Extract JSON from response
